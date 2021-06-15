@@ -1,0 +1,50 @@
+### 대화형 명령
+
+.대화형 모드 진입하기
+[source,console]
+----
+$ git add -i
+$ git add --interactive
+----
+
+.Staging Area에 추가할 수 있는 파일 확인
+[source,console]
+----
+*** Commands ***
+  1: status       2: update       3: revert       4: add untracked
+  5: patch        6: diff         7: quit         8: help
+What now> 2
+warning: LF will be replaced by CRLF in b.
+The file will have its original line endings in your working directory
+           staged     unstaged path
+  1:    unchanged        +1/-1 b
+----
+
+.Stage 할 수 있게 파일 선택
+[source,console]
+----
+Update>> 1
+           staged     unstaged path
+* 1:    unchanged        +1/-1 b
+----
+
+* 표시가 붙은 파일은 Stage 하도록 선택한 것
+
+`Update>>` 프롬프트에 아무것도 입력하지 않고 엔터를 치면 선택한 파일을 Staging Area로 추가
+
+.선택된 파일 Staging Area로 추가
+[source,console]
+----
+Update>>
+warning: LF will be replaced by CRLF in b.
+The file will have its original line endings in your working directory
+updated 1 path
+----
+
+.대화형 명령에서 빠져나오기
+[source,console]
+----
+# 대화형 명령에서 빠져나오기
+> q
+----
+
