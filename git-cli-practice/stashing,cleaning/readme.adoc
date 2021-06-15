@@ -1,0 +1,158 @@
+## Stashing과 Cleaning
+
+실습을 위해서 *stashing.bat* 파일 먼저 실행
+
+처음부터 다시 시작하고 싶으면 *init.bat* 파일 실행
+
+### Stash
+워킹 디렉토리에서 수정한 파일들만 저장::
+* Modified이면서 Tracked 상태인 파일
+* Staging Area에 있는 파일
+
+
+#### 하던 일을 Stash 하기
+.파일을 두개 수정하고 하나는 Staging Area에 추가된 상태
+[source,console]
+----
+$ git status
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   b
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   c
+----
+
+.작업 중인 파일 모두 stash
+[source,console]
+----
+$ git stash save
+Saved working directory and index state WIP on master: de24658 d
+----
+
+.워킹디렉토리 확인하기
+[source,console]
+----
+$ git status
+On branch master
+nothing to commit, working tree clean
+----
+
+.저장되어 있는 stash 확인
+[source,console]
+----
+$ git stash list
+stash@{0}: WIP on master: de24658 d
+stash@{1}: WIP on master: de24658 d
+stash@{2}: WIP on master: de24658 d
+----
+
+.stash 다시 적용하기
+[source,console]
+----
+$ git stash apply
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   b
+        modified:   c
+
+no changes added to commit (use "git add" and/or "git commit -a")
+----
+
+stash를 적용할 수 있는 경우::
+* Stash 할 때와 같은 브랜치가 아니여도 된다.
+* 어떤 브랜치에서 Stash하고 다른 브랜치에서 Stash를 복원할 수 있다.
+* 워킹 디렉토리가 깨끗할 필요 없다.
+* 워킹 디렉토리에 수정하고 커밋되지 않은 파일이 있어도 Stash를 적용할 수 있다.(충돌이 있으면 알려줌)
+
+
+NOTE: git stash apply 명령만으로는 staged 상태까지 적용해 주지 않기 때문에 git stash apply --index 옵션을 줘야 한다.
+
+.스택에 남아있는 stash 제거
+[source,console]
+----
+$ git stash drop
+Dropped refs/stash@{0} (ccde07509c5ebb914a578276d7503da78ec78241)
+----
+
+NOTE: drop 명령은 적용한 stash만 제거한다.
+
+---
+아래 부터는 재연하지 못함.
+
+.stash 적용하고 나서 바로 스택에서 제거하기
+[source,console]
+----
+$ git stash pop
+----
+
+#### Stash를 만드는 새로운 방법
+
+.이미 Staging Area에 들어 있는 파일 Stash 하지 않기
+[source,console]
+----
+$ git stash save --keep-index
+----
+
+
+.추적 중이지 않은 파일을 같이 Stash
+[source,console]
+----
+$ git stash --include-untracked
+$ git stash -u
+----
+
+
+.stash 적용하고 나서 바로 스택에서 제거하기
+[source,console]
+----
+$ git stash --patch
+----
+
+#### Stash를 적용한 브랜치 만들기
+[source,console]
+----
+$ git stash branch feat
+----
+
+NOTE: Stash할 당시의 커밋을 Checkout 한 후 새로운 브랜치를 만들고 여기에 적용. 이 모든 것이 성공하면 Stash를 삭제함.
+
+
+
+---
+
+### CLEAN
+
+워킹 디렉토리 안의 추적하고 있지 않은 모든 파일 삭제
+
+.워킹 디렉토리의 불필요한 모든 파일 지우기
+[source,console]
+----
+$ git clean
+----
+
+.추적중이지 않은 모든 정보를 워킹 디렉토리에서 지우기
+[source,console]
+----
+$ git clean -f -d
+----
+
+.가상으로 실행해보기(-n)
+[source,console]
+----
+$ git clean -d -n
+$ git clean -n -d -x
+----
+
+NOTE: `-x' 옵션은 *remove ignored files, too* 번역하면 무시된 파일도 제거
+
+.대화형으로 clean 명령 실행하기
+[source,console]
+----
+$ git clean -x -i
+----

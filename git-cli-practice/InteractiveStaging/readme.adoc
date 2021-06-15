@@ -1,0 +1,119 @@
+### 대화형 명령
+
+실습을 위해서 *interactivestaging.bat* 파일 먼저 실행
+
+처음부터 다시 시작하고 싶으면 *init.bat* 파일 실행
+
+.대화형 모드 진입하기
+[source,console]
+----
+$ git add -i
+$ git add --interactive
+           staged     unstaged path
+  1:    unchanged        +1/-1 b
+  2:    unchanged        +1/-1 c
+  3:    unchanged        +1/-1 d
+
+*** Commands ***
+  1: status       2: update       3: revert       4: add untracked
+  5: patch        6: diff         7: quit         8: help
+What now>
+----
+
+.Staging Area에 추가할 수 있는 파일 확인
+[source,console]
+----
+*** Commands ***
+  1: status       2: update       3: revert       4: add untracked
+  5: patch        6: diff         7: quit         8: help
+What now> 2
+           staged     unstaged path
+  1:    unchanged        +1/-1 b
+  2:    unchanged        +1/-1 c
+  3:    unchanged        +1/-1 d
+----
+
+.Stage 할 수 있게 파일 선택
+[source,console]
+----
+Update>> 1,2
+           staged     unstaged path
+* 1:    unchanged        +1/-1 b
+* 2:    unchanged        +1/-1 c
+  3:    unchanged        +1/-1 d
+----
+
+`*` 표시가 붙은 파일은 Stage 하도록 선택한 것
+
+`Update>>` 프롬프트에 아무것도 입력하지 않고 엔터를 치면 선택한 파일을 Staging Area로 추가
+
+.선택된 파일 Staging Area로 추가
+[source,console]
+----
+Update>> [enter]
+updated 2 paths
+----
+
+.Staging Area에 있는 파일 unstaged 하기
+[source,console]
+----
+*** Commands ***
+  1: status       2: update       3: revert       4: add untracked
+  5: patch        6: diff         7: quit         8: help
+What now> 3
+           staged     unstaged path
+  1:        +1/-1      nothing b
+  2:        +1/-1      nothing c
+  3:    unchanged        +1/-1 d
+Revert>> 1
+           staged     unstaged path
+* 1:        +1/-1      nothing b
+  2:        +1/-1      nothing c
+  3:    unchanged        +1/-1 d
+Revert>> [enter]
+reverted 1 path
+----
+
+.unstaged 됐는지 확인하기
+[source,console]
+----
+*** Commands ***
+  1: status       2: update       3: revert       4: add untracked
+  5: patch        6: diff         7: quit         8: help
+What now> 1
+           staged     unstaged path
+  1:    unchanged        +1/-1 b
+  2:        +1/-1      nothing c
+  3:    unchanged        +1/-1 d
+----
+
+.staged 파일의 변경 내용 확인하기
+[source,console]
+----
+*** Commands ***
+  1: status       2: update       3: revert       4: add untracked
+  5: patch        6: diff         7: quit         8: help
+What now> 6
+           staged     unstaged path
+  1:        +1/-1      nothing c
+Review diff>> 1
+diff --git a/c b/c
+index 12d6973..745cb2e 100644
+--- a/c
++++ b/c
+@@ -1 +1 @@
+-c 
++c1 
+----
+
+.대화형 모드 빠져나오기
+[source,console]
+----
+*** Commands ***
+  1: status       2: update       3: revert       4: add untracked
+  5: patch        6: diff         7: quit         8: help
+What now> 7
+Bye.
+----
+
+건너뛴 부분:: 파일의 일부분만 Staging Area에 추가하기
